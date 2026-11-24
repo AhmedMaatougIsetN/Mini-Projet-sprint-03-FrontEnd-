@@ -1,95 +1,60 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 import { laptop } from '../model/laptop.model';
 import { Type } from '../model/type.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+interface TypeCollection {
+  _embedded?: { types?: Type[] };
+}
+
+@Injectable({ providedIn: 'root' })
 export class laptopservice {
-  laptops: laptop[];
-  laptop!: laptop;
-  types: Type[];
+  private readonly apiUrl = 'http://localhost:8081/produits';
 
-  constructor() {
-    this.types = [
-      { idType: 1, nomType: 'Gming laptop' },
-      { idType: 2, nomType: 'Professional Laptop' },
-      { idType: 3, nomType: 'MacBooks' },
-    ];
+  constructor(private http: HttpClient) {}
 
-    this.laptops = [
-      {
-        idlaptop: 1,
-        nomlaptop: 'Lenovo Legion 5',
-        prixlaptop: 4799.200 ,
-        dateCreation: new Date('01/14/2011'),
-        type: { idType: 1, nomType: 'Gming laptop' },
-      },
-      {
-        idlaptop: 2,
-        nomlaptop: 'ASUS Zenbook 14 ',
-        prixlaptop: 3450,
-        dateCreation: new Date('12/17/2010'),
-        type: { idType: 2, nomType: 'Professional Laptop' },
-      },
-      {
-        idlaptop: 3,
-        nomlaptop: 'MacBook Air M1',
-        prixlaptop: 2499,
-        dateCreation: new Date('02/20/2020'),
-        type: { idType: 3, nomType: 'MacBooks' },
-      },
-    ];
+  listelaptops(): Observable<laptop[]> {
+    return this.http.get<laptop[]>(`${this.apiUrl}/api`);
   }
 
-  listelaptops(): laptop[] {
-    return this.laptops;
+  chercherlaptopsParNom(nom: string): Observable<laptop[]> {
+    const params = new HttpParams().set('nom', nom);
+    return this.http.get<laptop[]>(`${this.apiUrl}/api/prodsnom`, { params });
   }
 
-  ajouterlaptop(prod: laptop) {
-    this.laptops.push(prod);
+  chercherlaptopsParType(idType: number): Observable<laptop[]> {
+    return this.http.get<laptop[]>(`${this.apiUrl}/api/prodscat/${idType}`);
   }
 
-  supprimerlaptop(prod: laptop) {
-   
-    const index = this.laptops.indexOf(prod, 0);
-    if (index > -1) {
-      this.laptops.splice(index, 1);
-    }
-
+  ajouterlaptop(prod: laptop): Observable<laptop> {
+    return this.http.post<laptop>(`${this.apiUrl}/api`, this.toApiPayload(prod));
   }
 
-  consulterlaptop(id: number): laptop {
-    this.laptop = this.laptops.find((p) => p.idlaptop == id)!;
-    return this.laptop;
+  supprimerlaptop(prod: laptop): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/api/${prod.idlaptop}`);
   }
 
-  trierlaptops() {
-    this.laptops = this.laptops.sort((n1, n2) => {
-      if (n1.idlaptop! > n2.idlaptop!) {
-        return 1;
-      }
-      if (n1.idlaptop! < n2.idlaptop!) {
-        return -1;
-      }
-      return 0;
-    });
+  consulterlaptop(id: number): Observable<laptop> {
+    return this.http.get<laptop>(`${this.apiUrl}/api/${id}`);
   }
 
-  updatelaptop(p: laptop) {
-    this.supprimerlaptop(p);
-    this.ajouterlaptop(p);
-    this.trierlaptops();
+  updatelaptop(prod: laptop): Observable<laptop> {
+    return this.http.put<laptop>(`${this.apiUrl}/api/${prod.idlaptop}`, this.toApiPayload(prod));
   }
 
-
-  listeTypes():Type[] {
-    return this.types;
+  listeTypes(): Observable<Type[]> {
+    return this.http.get<TypeCollection>(`${this.apiUrl}/cat`).pipe(
+      map(response => response._embedded?.types ?? [])
+    );
   }
 
-consulterType(id:number): Type{    
-        return this.types.find(type => type.idType  == id)!;
-         }
-
-
+  private toApiPayload(prod: laptop) {
+    return {
+      nomlaptop: prod.nomlaptop,
+      prixlaptop: prod.prixlaptop,
+      dateCreation: prod.dateCreation,
+      type: { idType: Number(prod.type?.idType) }
+    };
+  }
 }

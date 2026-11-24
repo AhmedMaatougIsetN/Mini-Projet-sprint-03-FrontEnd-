@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { laptop } from '../model/laptop.model';
 import { laptopservice } from '../services/laptop.service';
@@ -13,15 +13,15 @@ import { laptopservice } from '../services/laptop.service';
 export class RechercheParNomComponent implements OnInit {
   laptops: laptop[] = [];
   searchTerm = '';
-
-  constructor(private laptopservice: laptopservice) {}
-
-  ngOnInit(): void {
-    this.laptops = this.laptopservice.listelaptops();
+  constructor(private laptopservice: laptopservice, private changeDetector: ChangeDetectorRef) {}
+  ngOnInit(): void { this.chargerLaptops(); }
+  chargerLaptops(): void {
+    const term = this.searchTerm.trim();
+    const request = term ? this.laptopservice.chercherlaptopsParNom(term) : this.laptopservice.listelaptops();
+    request.subscribe(laptops => {
+      this.laptops = laptops;
+      this.changeDetector.detectChanges();
+    });
   }
-
-  get laptopsFiltres(): laptop[] {
-    const terme = this.searchTerm.trim().toLocaleLowerCase();
-    return this.laptops.filter(item => item.nomlaptop.toLocaleLowerCase().includes(terme));
-  }
+  get laptopsFiltres(): laptop[] { return this.laptops; }
 }

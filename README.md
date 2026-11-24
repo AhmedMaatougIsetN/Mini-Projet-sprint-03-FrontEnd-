@@ -1,27 +1,12 @@
-# MeslaptopsFinAtelier03
+# Mini Projet [sprint 03]
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.5.
+Interface Angular du Mini Projet [sprint 03]. Elle gère la liste, l’ajout, la modification, la suppression et la recherche des laptops par nom ou type, via l’API Spring Boot et MySQL. La connexion utilise le token JWT du backend.
 
-## Development server
+## Démarrage
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1. Démarrer MySQL dans XAMPP.
+2. Démarrer le backend `laptops-api` dans Spring Tools.
+3. Dans ce dossier, exécuter `npm ci`, puis `npm start`.
+4. Ouvrir `http://localhost:4200`.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Les requêtes Angular utilisent l’API `http://localhost:8081/produits`. Le projet backend se trouve dans le dossier voisin `Mini Projet 3 Backend\laptops-api`.

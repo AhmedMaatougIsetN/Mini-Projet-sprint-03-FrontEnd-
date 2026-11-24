@@ -7,7 +7,6 @@ import { AuthService } from './services/auth.service';
   standalone: true,
   imports: [RouterLink, RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   constructor(public authService: AuthService, private router: Router) {}
@@ -20,5 +19,6 @@ export class AppComponent implements OnInit {
     this.authService.logout();
   }
 }
+
 
 

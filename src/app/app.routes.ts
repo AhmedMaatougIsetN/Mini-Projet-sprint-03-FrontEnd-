@@ -11,10 +11,11 @@ import { laptopAdminGuard } from './services/laptop-admin.guard';
 export const routes: Routes = [
   { path: 'laptops', component: laptopsComponent },
   { path: 'add-laptop', component: AddlaptopComponent, canActivate: [laptopAdminGuard] },
-  { path: 'updatelaptop/:id', component: UpdatelaptopComponent },
+  { path: 'updatelaptop/:id', component: UpdatelaptopComponent, canActivate: [laptopAdminGuard] },
   { path: 'rechercheParNom', component: RechercheParNomComponent },
   { path: 'rechercheParType', component: RechercheParTypeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'app-forbidden', component: ForbiddenComponent },
   { path: '', redirectTo: 'laptops', pathMatch: 'full' }
 ];
+

@@ -1,28 +1,38 @@
 <div class="container">
+  @if (erreur) {
+    <div class="alert alert-danger mt-3" role="alert">{{ erreur }}</div>
+  }
   <div class="card shadow mb-4">
     <div class="card-body">
       <table class="table table-striped">
-        <tr><th>N°</th><th>Id</th><th>Nom</th><th>Prix</th><th>Date Création</th><th>Type</th></tr>
-        @for (laptop of laptops; track laptop.idlaptop; let index = $index; let nbr = $count; let last = $last) {
-          <tbody>
+        <thead>
+          <tr>
+            <th>N°</th><th>Id</th><th>Nom</th><th>Prix</th><th>Date Création</th><th>Type</th>
+            @if (authService.isAdmin()) { <th>Actions</th> }
+          </tr>
+        </thead>
+        <tbody>
+          @for (laptop of laptops; track laptop.idlaptop; let index = $index) {
             <tr>
-              <td>{{index}}</td>
-              <td>{{laptop.idlaptop}}</td>
-              <td>{{laptop.nomlaptop}}</td>
-              <td>{{laptop.prixlaptop}}</td>
-              <td>{{laptop.dateCreation | date:'dd/MM/yyyy'}}</td>
-              @if (laptop.type) {
-                <td>{{laptop.type.nomType}}</td>
-              } @else {
-                <td>'PAS DE TYPE'</td>
-              }
+              <td>{{ index + 1 }}</td>
+              <td>{{ laptop.idlaptop }}</td>
+              <td>{{ laptop.nomlaptop }}</td>
+              <td>{{ laptop.prixlaptop }}</td>
+              <td>{{ laptop.dateCreation | date:'dd/MM/yyyy' }}</td>
+              <td>{{ laptop.type.nomType }}</td>
               @if (authService.isAdmin()) {
-                <td><a class="btn btn-danger" (click)="supprimerlaptop(laptop)">Supprimer</a></td>
-                <td><a class="btn btn-success" [routerLink]="['/updatelaptop', laptop.idlaptop]">Modifier</a></td>
+                <td class="text-nowrap">
+                  <button type="button" class="btn btn-danger btn-sm me-2" (click)="supprimerlaptop(laptop)">Supprimer</button>
+                  <a class="btn btn-success btn-sm" [routerLink]="['/updatelaptop', laptop.idlaptop]">Modifier</a>
+                </td>
               }
             </tr>
-          </tbody>
-        }
+          } @empty {
+            @if (!erreur) {
+              <tr><td colspan="7" class="text-center">Aucun laptop enregistré.</td></tr>
+            }
+          }
+        </tbody>
       </table>
     </div>
   </div>

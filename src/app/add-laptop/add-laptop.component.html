@@ -1,49 +1,26 @@
 <div class="container">
-    <div>
-      <h2>Ajouter un laptop :</h2>             
+  <h2>Ajouter un laptop :</h2>
+  @if (message) { <div class="alert alert-danger">{{message}}</div> }
+  <form (ngSubmit)="addlaptop()">
+    <div class="col-sm-4 col-md-4 col-lg-4 mb-3">
+      <label for="nomlaptop">Nom laptop</label>
+      <input id="nomlaptop" type="text" [(ngModel)]="newlaptop.nomlaptop" name="nomlaptop" class="form-control" required>
     </div>
-         <form > 
-         
-             <div class="col-sm-2 col-md-2 col-lg-2">
-               <label >ID  laptop</label>
-               <input   type="text"  [(ngModel)]="newlaptop.idlaptop"  
-                   name="idlaptop" class="form-control">
-              </div>
-         
-             <div class="col-sm-4 col-md-4 col-lg-4" >
-               <label >Nom laptop</label>
-               <input  type="text"[(ngModel)]= "newlaptop.nomlaptop"  
-                   name="nomlaptop" class="form-control">
-             </div>
-
-             <div class="col-sm-2 col-md-2 col-lg-2">
-               <label >Prix laptop</label>
-               <input type="number"   [(ngModel)]= "newlaptop.prixlaptop"  
-                   name="prixlaptop" class="form-control">
-             </div>
-
-             <div class="col-sm-4 col-md-4 col-lg-4">
-                 <label >Date création</label>
-                 <input type="date"  [(ngModel)]= "newlaptop.dateCreation" 
-                     name="dateCreation" class="form-control">
-             </div>
-
-            <div class="col-sm-4 col-md-4 col-lg-4">
-              <label>Type</label>
-            
-              <select class="form-control form-control-lg" id="idType" name="idType" [(ngModel)]="newIdType">
-                 @for(type of types; track type.idType){
-                   <option  [value]="type.idType">  {{type.nomType}}
-                    </option>
-                  }
-              </select>
-            </div>
-         
-              
-       <div class="mt-2">
-  <button type="submit" (click)="addlaptop()"class="btn btn-success">Ajouter</button>
-       </div>   
-
-     
-         </form>
-</div>       
+    <div class="col-sm-2 col-md-2 col-lg-2 mb-3">
+      <label for="prixlaptop">Prix laptop</label>
+      <input id="prixlaptop" type="number" [(ngModel)]="newlaptop.prixlaptop" name="prixlaptop" class="form-control" required>
+    </div>
+    <div class="col-sm-4 col-md-4 col-lg-4 mb-3">
+      <label for="dateCreation">Date création</label>
+      <input id="dateCreation" type="date" [(ngModel)]="newlaptop.dateCreation" name="dateCreation" class="form-control" required>
+    </div>
+    <div class="col-sm-4 col-md-4 col-lg-4 mb-3">
+      <label for="idType">Type</label>
+      <select id="idType" name="idType" [(ngModel)]="newIdType" class="form-control form-control-lg" required>
+        <option [ngValue]="null">Choisir un type</option>
+        @for (type of types; track type.idType) { <option [ngValue]="type.idType">{{type.nomType}}</option> }
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">Ajouter</button>
+  </form>
+</div>

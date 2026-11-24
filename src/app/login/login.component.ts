@@ -17,10 +17,10 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLoggedin(): void {
-    if (this.authService.signIn(this.user)) {
-      this.router.navigate(['/laptops']);
-    } else {
-      this.erreur = 1;
-    }
+    this.erreur = 0;
+    this.authService.signIn(this.user).subscribe({
+      next: () => this.router.navigate(['/laptops']),
+      error: () => this.erreur = 1
+    });
   }
 }
